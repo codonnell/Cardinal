@@ -1,6 +1,7 @@
 {
     "nickname": "Cardinal",
-    "password": "NICKSERV PASSWORD",
+    "authname": "USERNAME TO AUTH WITH",
+    "password": "NICKSERV/AUTH PASSWORD",
     "username": "cardinal",
     "realname": "The most awesome irc bot.",
     "network": "irc.darkscience.net",

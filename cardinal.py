@@ -63,9 +63,10 @@ https://github.com/JohnMaguire/Cardinal
     # Define the config spec and create a parser for our internal config
     spec = ConfigSpec()
     spec.add_option('nickname', basestring, 'Cardinal')
-    spec.add_option('password', basestring, None)
     spec.add_option('username', basestring, None)
     spec.add_option('realname', basestring, None)
+    spec.add_option('authname', basestring, None)
+    spec.add_option('password', basestring, None)
     spec.add_option('network', basestring, 'irc.freenode.net')
     spec.add_option('port', int, 6667)
     spec.add_option('server_password', basestring, None)
@@ -167,10 +168,9 @@ https://github.com/JohnMaguire/Cardinal
     # Instance a new factory, and connect with/without SSL
     logger.debug("Instantiating CardinalBotFactory")
     factory = CardinalBotFactory(config['network'], config['server_password'],
-                                 config['channels'],
-                                 config['nickname'], config['password'],
-                                 config['username'],
-                                 config['realname'],
+                                 config['channels'], config['nickname'],
+                                 config['username'], config['realname'],
+                                 config['authname'], config['password'],
                                  config['plugins'],
                                  storage_path)
 
