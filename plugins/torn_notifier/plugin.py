@@ -81,7 +81,11 @@ class TornNotifierPlugin(object):
             return
 
         # Store notification in user's storage.
-        notification = self.notification_types[notify_type](cardinal, channel, args)
+        try:
+            notification = self.notification_types[notify_type](cardinal, channel, args)
+        except (ValueError, IndexError):
+            return
+
         user_nick = nick(user)
         if user_nick not in self.notification_storage:
             self.notification_storage[user_nick] = NotificationStorage()
@@ -225,9 +229,13 @@ class NotificationStorage:
 
 
 class PriceBelowNotification:
+
     def __init__(self, cardinal, channel, args):
         self.syntax = "Syntax: .notify price_below <item_id>" \
                         " <item_name> <price> <poll_interval> <api_key>"
+        self.notify_type = "price_below"
+        self._cardinal = cardinal
+        self._channel = channel
         try:
             self._item_id = int(args[2])
             self._item_name = args[3]
@@ -235,14 +243,12 @@ class PriceBelowNotification:
             self._interval = float(args[5])
             self._api_key = args[6]
             self.name = self._item_name
-            self.notify_type = "price_below"
-            self._cardinal = cardinal
-            self._channel = channel
         except IndexError:
             cardinal.sendMsg(channel, self.syntax)
-            return
+            raise IndexError
         except ValueError:
             cardinal.sendMsg(channel, self.syntax)
+            raise ValueError
 
     def __str__(self):
         return "Notification in {channel} for {item_name} (ID {id}) price below {price}".format(
@@ -263,9 +269,13 @@ class PriceBelowNotification:
         self._poller.stopPolling()
 
 class PriceAboveNotification:
+
     def __init__(self, cardinal, channel, args):
         self.syntax = "Syntax: .notify price_above <item_id>" \
                         " <item_name> <price> <poll_interval> <api_key>"
+        self.notify_type = "price_above"
+        self._cardinal = cardinal
+        self._channel = channel
         try:
             self._item_id = int(args[2])
             self._item_name = args[3]
@@ -273,14 +283,12 @@ class PriceAboveNotification:
             self._interval = float(args[5])
             self._api_key = args[6]
             self.name = self._item_name
-            self.notify_type = "price_above"
-            self._cardinal = cardinal
-            self._channel = channel
         except IndexError:
             cardinal.sendMsg(channel, self.syntax)
-            return
+            raise IndexError
         except ValueError:
             cardinal.sendMsg(channel, self.syntax)
+            raise ValueError
 
     def __str__(self):
         return "Notification in {channel} for {item_name} (ID {id}) price above {price}".format(
